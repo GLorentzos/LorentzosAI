@@ -12,6 +12,7 @@ from urllib.parse import urlparse
 from jinja2 import Environment, FileSystemLoader
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
+import uuid
 
 app = FastAPI()
 
@@ -37,6 +38,46 @@ def init_db():
         conn.commit()
 
 init_db()
+
+def add_message(user_token: str, role: str, content: str):
+    with sqlite3.connect(DATABASE_FILE) as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            "INSERT INTO conversations (user_token, role, content) VALUES (?, ?, ?)",
+            (user_token, role, content)
+        )
+        conn.commit()
+
+def get_user_messages(user_token: str):
+    with sqlite3.connect(DATABASE_FILE) as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT role, content FROM conversations WHERE user_token = ? ORDER BY timestamp ASC",
+            (user_token,)
+        )
+        rows = cursor.fetchall()
+        return [{"role": row[0], "content": row[1]} for row in rows]
+
+def clear_user_messages(user_token: str):
+    with sqlite3.connect(DATABASE_FILE) as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            "DELETE FROM conversations WHERE user_token = ?",
+            (user_token,)
+        )
+        conn.commit()
+
+def replace_model_references(text: str):
+    # Replace mentions of the model with "Lorentzos AI"
+    replacements = {
+        "Llama3": "Lorentzos AI",
+        "LLaMA": "Lorentzos AI",
+        "Meta": "Lorentzos",
+        "Llama": "Lorentzos AI"
+    }
+    for old, new in replacements.items():
+        text = text.replace(old, new)
+    return text
 
 class ChatRequest(BaseModel):
     userToken: str
