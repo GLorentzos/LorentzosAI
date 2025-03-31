@@ -41,9 +41,6 @@ class ChatRequest(BaseModel):
     message: str
     webSearch: bool = False
 
-@app.get("/", response_class=HTMLResponse)
-def index():
-    return "<h1>FastAPI Chatbot is running!</h1>"
 
 @app.post("/chat")
 def chat(request: ChatRequest):
