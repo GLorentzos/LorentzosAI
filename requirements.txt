@@ -8,3 +8,5 @@ textblob
 urllib3
 uvicorn
 jinja2
+pydantic
+sqlite3
