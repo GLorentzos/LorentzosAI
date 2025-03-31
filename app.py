@@ -84,6 +84,14 @@ def new_chat(request: ChatRequest):
     clear_user_messages(request.userToken)
     return JSONResponse(content={"success": True})
 
+# Set up Jinja2 environment
+templates = Environment(loader=FileSystemLoader("templates"))
+
+@app.get("/", response_class=HTMLResponse)
+async def index(request: Request):
+    template = templates.get_template("index.html")
+    return HTMLResponse(content=template.render(), status_code=200)
+    
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", 8000)))
