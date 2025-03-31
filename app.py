@@ -9,6 +9,7 @@ from bs4 import BeautifulSoup
 import wikipedia
 import re
 from urllib.parse import urlparse
+from jinja2 import Environment, FileSystemLoader
 
 app = FastAPI()
 
