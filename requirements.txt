@@ -2,6 +2,6 @@ flask
 groq
 requests
 beautifulsoup4
-wikipedia-api
+wikipedia
 urllib3
 uvicorn
