@@ -3,5 +3,7 @@ groq
 requests
 beautifulsoup4
 wikipedia
+fastapi
+textblob
 urllib3
 uvicorn
