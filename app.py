@@ -11,6 +11,8 @@ import re
 from urllib.parse import urlparse
 from jinja2 import Environment, FileSystemLoader
 from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
+
 app = FastAPI()
 
 # Set your Groq API key
@@ -84,7 +86,14 @@ def new_chat(request: ChatRequest):
 
 # Set up Jinja2 environment
 templates = Jinja2Templates(directory="templates")
+# Serve the static folder
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
+@app.get("/appjs", response_class=HTMLResponse)
+async def get_app_js():
+    with open("static/app.js", "r", encoding="utf-8") as file:
+        return HTMLResponse(content=file.read(), media_type="application/javascript")
+        
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
