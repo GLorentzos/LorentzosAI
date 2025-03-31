@@ -7,3 +7,4 @@ fastapi
 textblob
 urllib3
 uvicorn
+jinja2
