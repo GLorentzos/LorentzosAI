@@ -10,7 +10,7 @@ import wikipedia
 import re
 from urllib.parse import urlparse
 from jinja2 import Environment, FileSystemLoader
-
+from fastapi.templating import Jinja2Templates
 app = FastAPI()
 
 # Set your Groq API key
@@ -83,12 +83,11 @@ def new_chat(request: ChatRequest):
     return JSONResponse(content={"success": True})
 
 # Set up Jinja2 environment
-templates = Environment(loader=FileSystemLoader("templates"))
+templates = Jinja2Templates(directory="templates")
 
 @app.get("/", response_class=HTMLResponse)
-async def index(request: Request):
-    template = templates.get_template("index.html")
-    return HTMLResponse(content=template.render(), status_code=200)
+async def read_root(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
     
 if __name__ == "__main__":
     import uvicorn
