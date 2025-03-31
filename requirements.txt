@@ -4,3 +4,4 @@ requests
 beautifulsoup4
 wikipedia-api
 urllib3
+uvicorn
