@@ -102,7 +102,7 @@ def chat(request: ChatRequest):
     messages = [system_message] + conversation_history
     
     completion = groq_client.chat.completions.create(
-        model="llama3-8b-8192",
+        model="qwen-2.5-32b",
         messages=messages,
         temperature=0.7,
         max_tokens=1500,
